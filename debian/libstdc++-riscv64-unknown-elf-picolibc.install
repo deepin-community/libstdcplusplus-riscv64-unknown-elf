@@ -1,0 +1,3 @@
+picolibc/usr/riscv64-unknown-elf/lib/* /usr/lib/picolibc/riscv64-unknown-elf/lib/
+picolibc-release/usr/riscv64-unknown-elf/lib/* /usr/lib/picolibc/riscv64-unknown-elf/lib/release/
+

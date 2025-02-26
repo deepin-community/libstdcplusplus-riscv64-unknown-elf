@@ -1,0 +1,3 @@
+libstdc++-riscv64-unknown-elf-picolibc binary: arch-independent-package-contains-binary-or-object
+libstdc++-riscv64-unknown-elf-picolibc binary: static-library-has-unneeded-sections
+libstdc++-riscv64-unknown-elf-picolibc binary: unstripped-static-library
