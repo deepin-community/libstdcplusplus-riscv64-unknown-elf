@@ -1,5 +1,23 @@
-template-repository (1.0-1) unstable; urgency=medium
+libstdc++-riscv64-unknown-elf (4) unstable; urgency=medium
+
+  * Add local copy of gcc source code.
+
+ -- Keith Packard <keithp@keithp.com>  Fri, 31 Jan 2025 23:01:35 -0800
+
+libstdc++-riscv64-unknown-elf (3) unstable; urgency=medium
+
+  * Replace tests with something that works
+
+ -- Keith Packard <keithp@keithp.com>  Wed, 08 Jan 2025 12:24:37 -0800
+
+libstdc++-riscv64-unknown-elf (2) unstable; urgency=medium
+
+  * Add lintian overrides
+
+ -- Keith Packard <keithp@keithp.com>  Sun, 29 Sep 2024 21:49:15 -0700
+
+libstdc++-riscv64-unknown-elf (1) unstable; urgency=medium
 
   * Initial release
 
- -- Tsic404 <liuheng@deepin.org>  Sat, 28 Jan 2023 13:46:49 +0800
+ -- Keith Packard <keithp@keithp.com>  Sat, 28 Sep 2024 22:07:59 -0700

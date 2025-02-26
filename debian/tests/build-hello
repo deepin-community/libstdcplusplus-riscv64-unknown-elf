@@ -1,0 +1,1 @@
+cd debian/tests/hello-world && make

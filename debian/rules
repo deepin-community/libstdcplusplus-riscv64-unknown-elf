@@ -1,4 +1,122 @@
 #!/usr/bin/make -f
+# export DH_VERBOSE=1
+
+export DEB_BUILD_MAINT_OPTIONS=hardening=-fortify,-stackprotector
+
+TARGET=riscv64-unknown-elf
+
+GCC_VERSION=14.2.0
+
+include /usr/share/dpkg/pkg-info.mk
+
+SVERSION := $(GCC_VERSION)
+DVERSION := $(SVERSION)+$(DEB_VERSION)
+UVERSION := $(GCC_VERSION)
+BASE_VERSION := $(shell echo $(DVERSION) | sed -e 's/\([1-9]\.[0-9]\).*/\1/')
+
+TOP_DIR=$(shell pwd)
+LIBSTDCXX_SDIR=$(TOP_DIR)/src/libstdc++-v3
+STAMP_DIR=$(TOP_DIR)/debian/stamp
+UNPACK=$(STAMP_DIR)/unpack
+APPY_PATCHES=$(STAMP_DIR)/patches
+BUILD_DIR=$(TOP_DIR)/build/libstdc++
+BUILD_PICOLIBC_DIR=$(TOP_DIR)/build_picolibc/libstdc++
+BUILD_PICOLIBC_RELEASE_DIR=$(TOP_DIR)/build_picolibc_release/libstdc++
+PPICOLIBC=libstdc\+\+-arm-none-eabi-picolibc
+
+CFLAGS := -ffile-prefix-map=$(TOP_DIR)=. -Wformat -Werror=format-security
+CXXFLAGS := $(CFLAGS)
+
+BUILDFLAGS_PICOLIBC=CFLAGS="--specs=picolibc.specs $(CFLAGS) -g -Os -ffunction-sections -fdata-sections" CXXFLAGS="--specs=picolibcpp.specs $(CXXFLAGS) -g -Os -ffunction-sections -fdata-sections" LDFLAGS="--specs=picolibc.specs $(LDFLAGS)"
+BUILDFLAGS_PICOLIBC_RELEASE=CFLAGS="--specs=picolibc.specs --picolibc-buildtype=release $(CFLAGS) -g -O3 -ffunction-sections -fdata-sections" CXXFLAGS="--specs=picolibcpp.specs --picolibc-buildtype=release $(CXXFLAGS) -g -O3 -ffunction-sections -fdata-sections" LDFLAGS="--specs=picolibc.specs --picolibc-buildtype=release $(LDFLAGS)"
+
+TARGET_TOOLS=\
+	AR_FOR_TARGET=$(TARGET)-ar \
+	AS_FOR_TARGET=$(TARGET)-as \
+	LD_FOR_TARGET=$(TARGET)-ld \
+	NM_FOR_TARGET=$(TARGET)-nm \
+	OBJDUMP_FOR_TARGET=$(TARGET)-objdump \
+	RANLIB_FOR_TARGET=$(TARGET)-ranlib \
+	READELF_FOR_TARGET=$(TARGET)-readelf \
+	STRIP_FOR_TARGET=$(TARGET)-strip
+
+CONFIGURE_FLAGS = \
+	--with-cross-host=$(DEB_HOST_GNU_TYPE) \
+	--with-target-subdir="." \
+	--enable-multilib \
+	--disable-decimal-float \
+	--disable-libffi \
+	--disable-libgomp \
+	--disable-libmudflap \
+	--disable-libquadmath \
+	--disable-libssp \
+	--disable-libstdcxx-pch \
+	--disable-nls \
+	--disable-shared \
+	--disable-threads \
+	--enable-tls \
+	--disable-plugin \
+	--disable-libstdcxx-verbose \
+	--mandir=/usr/share/man \
+	--with-system-zlib \
+	--with-gnu-as \
+	--with-gnu-ld \
+	--with-newlib \
+	--with-headers=yes \
+	"--with-pkgversion=$(DVERSION)" \
+	--without-included-gettext \
+	--with-host-libstdcxx="-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
+	--enable-languages=c,c++ \
+	--disable-option-checking \
+	--build=$(DEB_BUILD_GNU_TYPE) \
+	--target=$(TARGET) \
+	--host=$(TARGET) \
+	$(TARGET_TOOLS)
+
+CONFIGURE_FLAGS_PICOLIBC= \
+	--enable-cstdio=stdio_pure \
+	--disable-wchar_t \
 
 %:
 	dh $@
+
+$(UNPACK):
+	mkdir -p $(STAMP_DIR)
+	mkdir -p src
+	tar xf debian/gcc-*.tar.* --strip-components=1 -C src
+	set -ex; \
+		cd src; \
+		for patch in ../debian/patches/*.patch; do \
+			echo Applying patch "$$patch"; \
+			patch -p1 < "$$patch"; \
+		done
+	touch $@
+
+override_dh_auto_configure: $(UNPACK)
+	mkdir -p $(BUILD_PICOLIBC_DIR) $(BUILD_PICOLIBC_RELEASE_DIR)
+	dh_auto_configure -D$(LIBSTDCXX_SDIR) -B$(BUILD_PICOLIBC_DIR) -- $(CONFIGURE_FLAGS) $(CONFIGURE_FLAGS_PICOLIBC) $(BUILDFLAGS_PICOLIBC)
+	dh_auto_configure -D$(LIBSTDCXX_SDIR) -B$(BUILD_PICOLIBC_RELEASE_DIR) -- $(CONFIGURE_FLAGS) $(CONFIGURE_FLAGS_PICOLIBC) $(BUILDFLAGS_PICOLIBC_RELEASE)
+
+override_dh_auto_clean:
+	rm -rf src build* debian/*tmp* $(STAMP_DIR)
+
+override_dh_auto_test:
+	@echo "no testing, that's way too painful"
+
+override_dh_gencontrol:
+	dh_gencontrol -- -v$(DVERSION) -Vlocal:Version=$(UVERSION) -Vgcc:Version=$(SVERSION)
+
+override_dh_auto_build:
+	dh_auto_build -B $(BUILD_PICOLIBC_DIR)
+	dh_auto_build -B $(BUILD_PICOLIBC_RELEASE_DIR)
+
+override_dh_auto_install:
+	dh_auto_install -B $(BUILD_PICOLIBC_DIR) --destdir debian/tmp/picolibc
+	dh_auto_install -B $(BUILD_PICOLIBC_RELEASE_DIR) --destdir debian/tmp/picolibc-release
+	find debian/tmp -name "*.la" -exec rm -f {} +
+
+override_dh_install:
+	dh_install
+
+override_dh_strip:
+	dh_strip -X.a

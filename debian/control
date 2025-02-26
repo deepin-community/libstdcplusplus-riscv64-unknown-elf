@@ -1,15 +1,59 @@
-Source: template-repository
-Section: unknown
+Source: libstdc++-riscv64-unknown-elf
+Section: devel
 Priority: optional
-Maintainer: Tsic404 <liuheng@deepin.org>
-Build-Depends: debhelper (>= 11)
-Standards-Version: 4.1.3
-Homepage: https://github.com/deepin-community/template-repository
-#Vcs-Browser: https://salsa.debian.org/debian/deepin-community-template-repository
-#Vcs-Git: https://salsa.debian.org/debian/deepin-community-template-repository.git
+Maintainer: Keith Packard <keithp@keithp.com>
+Build-Depends:
+ autotools-dev,
+ binutils-riscv64-unknown-elf,
+ gcc-riscv64-unknown-elf,
+ picolibc-riscv64-unknown-elf,
+ bison,
+ debhelper (>= 10),
+ dejagnu,
+ flex,
+ gawk,
+ gettext,
+ libgmp-dev,
+ libmpc-dev,
+ libmpfr-dev,
+ libtool,
+ locales,
+ lsb-release,
+ lzma,
+ m4,
+ patchutils,
+ sharutils,
+ texinfo,
+ xz-utils,
+ zlib1g-dev,
+ rename,
+Standards-Version: 4.2.0
+Homepage: http://gcc.gnu.org/
+Vcs-Git: https://salsa.debian.org/debian/libstdcxx-riscv64-unknown-elf.git
+Vcs-Browser: https://salsa.debian.org/debian/libstdcxx-riscv64-unknown-elf
 
-Package: template-repository
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Package: libstdc++-riscv64-unknown-elf-dev
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Recommends:
+Description: GNU Standard C++ Library v3 for Risc-V processors (headers)
+ GNU Standard C++ library for embedded Risc-V chips.
+ .
+ This package contains shared headers
+
+Package: libstdc++-riscv64-unknown-elf-picolibc
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+ picolibc-riscv64-unknown-elf,
+ libstdc++-riscv64-unknown-elf-dev,
+Recommends:
+ binutils-riscv64-unknown-elf,
+ gcc-riscv64-unknown-elf,
+Description: GNU Standard C++ Library v3 for Risc-V (picolibc)
+ GNU Standard C++ library for embedded Risc-V chips.
+ .
+ This library is built using picolibc as standard C library.
