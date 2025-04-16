@@ -37,6 +37,7 @@ Architecture: all
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ gcc-riscv64-unknown-elf,
 Recommends:
 Description: GNU Standard C++ Library v3 for Risc-V processors (headers)
  GNU Standard C++ library for embedded Risc-V chips.
@@ -50,8 +51,6 @@ Depends:
  ${shlibs:Depends},
  picolibc-riscv64-unknown-elf,
  libstdc++-riscv64-unknown-elf-dev,
-Recommends:
- binutils-riscv64-unknown-elf,
  gcc-riscv64-unknown-elf,
 Description: GNU Standard C++ Library v3 for Risc-V (picolibc)
  GNU Standard C++ library for embedded Risc-V chips.

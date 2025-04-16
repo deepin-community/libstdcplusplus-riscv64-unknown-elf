@@ -1,3 +1,9 @@
+libstdc++-riscv64-unknown-elf (5) unstable; urgency=medium
+
+  * Add dependency on compiler. Closes: #1102539.
+
+ -- Keith Packard <keithp@keithp.com>  Thu, 10 Apr 2025 17:59:53 -0700
+
 libstdc++-riscv64-unknown-elf (4) unstable; urgency=medium
 
   * Add local copy of gcc source code.
