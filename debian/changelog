@@ -1,3 +1,9 @@
+libstdc++-riscv64-unknown-elf (9deepin1) unstable; urgency=medium
+
+  * use low version binutils.
+
+ -- lhdjply <lhdjply@126.com>  Wed, 15 Apr 2026 13:07:17 +0800
+
 libstdc++-riscv64-unknown-elf (9) unstable; urgency=medium
 
   * Fix salsa URLs. Closes: #1129498.

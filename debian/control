@@ -5,8 +5,8 @@ Maintainer: Keith Packard <keithp@keithp.com>
 Rules-Requires-Root: no
 Build-Depends:
  gcc-riscv64-unknown-elf-source (>= 15.2.0),
- binutils-riscv64-unknown-elf (>= 2.45.50),
- binutils-aarch64-none-elf (>= 2.45.50),
+ binutils-riscv64-unknown-elf,
+ binutils-aarch64-none-elf,
  gcc-riscv64-unknown-elf (>= 15.2.0),
  picolibc-riscv64-unknown-elf (>= 1.8.11),
  bison,
