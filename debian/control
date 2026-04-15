@@ -2,11 +2,13 @@ Source: libstdc++-riscv64-unknown-elf
 Section: devel
 Priority: optional
 Maintainer: Keith Packard <keithp@keithp.com>
+Rules-Requires-Root: no
 Build-Depends:
- autotools-dev,
- binutils-riscv64-unknown-elf,
- gcc-riscv64-unknown-elf,
- picolibc-riscv64-unknown-elf,
+ gcc-riscv64-unknown-elf-source (>= 15.2.0),
+ binutils-riscv64-unknown-elf (>= 2.45.50),
+ binutils-aarch64-none-elf (>= 2.45.50),
+ gcc-riscv64-unknown-elf (>= 15.2.0),
+ picolibc-riscv64-unknown-elf (>= 1.8.11),
  bison,
  debhelper (>= 10),
  dejagnu,
@@ -27,32 +29,18 @@ Build-Depends:
  xz-utils,
  zlib1g-dev,
  rename,
-Standards-Version: 4.2.0
+Standards-Version: 4.7.0
 Homepage: http://gcc.gnu.org/
-Vcs-Git: https://salsa.debian.org/debian/libstdcxx-riscv64-unknown-elf.git
+Vcs-Git: https://salsa.debian.org/debian/libstdcxx-riscv64-unknown-elf
 Vcs-Browser: https://salsa.debian.org/debian/libstdcxx-riscv64-unknown-elf
 
-Package: libstdc++-riscv64-unknown-elf-dev
+Package: libstdc++-riscv64-unknown-elf
 Architecture: all
+Multi-Arch: foreign
 Depends:
  ${misc:Depends},
- ${shlibs:Depends},
- gcc-riscv64-unknown-elf,
-Recommends:
-Description: GNU Standard C++ Library v3 for Risc-V processors (headers)
- GNU Standard C++ library for embedded Risc-V chips.
- .
- This package contains shared headers
-
-Package: libstdc++-riscv64-unknown-elf-picolibc
-Architecture: all
-Depends:
- ${misc:Depends},
- ${shlibs:Depends},
- picolibc-riscv64-unknown-elf,
- libstdc++-riscv64-unknown-elf-dev,
- gcc-riscv64-unknown-elf,
-Description: GNU Standard C++ Library v3 for Risc-V (picolibc)
- GNU Standard C++ library for embedded Risc-V chips.
- .
- This library is built using picolibc as standard C library.
+ picolibc-riscv64-unknown-elf (>= 1.8.11),
+ gcc-riscv64-unknown-elf (= ${gcc:Version}),
+Description: GNU Standard C++ Library v3 for embedded Risc-V processors
+ GNU Standard C++ library for embedded Risc-V processors, both 32 and
+ 64 bit.

@@ -1,5 +1,0 @@
-Tests: build-hello
-Restrictions:
-    allow-stderr
-Depends: @,
- gcc-riscv64-unknown-elf, qemu-system-riscv
